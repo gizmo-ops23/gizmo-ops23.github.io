@@ -19,6 +19,7 @@
     --teal:#2E8C82;
     --amber:#E7A93B;
     --red:#D9614F;
+    --violet:#B268D8;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -141,6 +142,10 @@
     font-weight:600;
     letter-spacing:-0.01em;
   }
+  .marker h2.c-amber{ color:var(--amber); }
+  .marker h2.c-teal{ color:var(--teal); }
+  .marker h2.c-violet{ color:var(--violet); }
+  .marker h2.c-red{ color:var(--red); }
 
   /* Hero */
   #intro{ padding-top:170px; }
@@ -384,15 +389,16 @@
 
   <div class="topbar">
     <div class="topbar-inner">
-      <span class="wordmark">G1ZMO</span>
+      <span class="wordmark">G1zmo</span>
       <nav class="nav-links" id="navLinks">
         <a href="#intro" data-target="intro"><span class="tc">00:00</span>Intro</a>
         <a href="#featured" data-target="featured"><span class="tc">00:12</span>Featured</a>
-        <a href="#shorts" data-target="shorts"><span class="tc">00:24</span>Shorts</a>
-        <a href="#montages" data-target="montages"><span class="tc">01:12</span>Montages</a>
-        <a href="#about" data-target="about"><span class="tc">01:48</span>About</a>
-        <a href="#clients" data-target="clients"><span class="tc">02:05</span>Clients</a>
-        <a href="#contact" data-target="contact"><span class="tc">02:20</span>Contact</a>
+        <a href="#shorts" data-target="shorts"><span class="tc">00:24</span>Gaming Shorts</a>
+        <a href="#montages" data-target="montages"><span class="tc">01:12</span>Gaming Montages</a>
+        <a href="#finance" data-target="finance"><span class="tc">01:40</span>Finance</a>
+        <a href="#about" data-target="about"><span class="tc">02:00</span>About</a>
+        <a href="#clients" data-target="clients"><span class="tc">02:15</span>Clients</a>
+        <a href="#contact" data-target="contact"><span class="tc">02:30</span>Contact</a>
       </nav>
       <div class="scrub-track"><div class="scrub-fill" id="scrubFill"></div></div>
     </div>
@@ -428,8 +434,8 @@
 
     <section id="featured">
       <div class="marker">
-        <span class="tc mono">00:12</span>
-        <h2>Featured Edit</h2>
+        <span class="tc mono" style="color:var(--teal);">00:12</span>
+        <h2 class="c-teal">Featured Edit</h2>
       </div>
       <p class="lead">The edit I'd show first.</p>
       <div class="featured-card">
@@ -439,8 +445,8 @@
 
     <section id="shorts">
       <div class="marker">
-        <span class="tc mono">00:24</span>
-        <h2>Popular Shorts</h2>
+        <span class="tc mono" style="color:var(--amber);">00:24</span>
+        <h2 class="c-amber">Gaming Shorts</h2>
       </div>
       <p class="lead">Fast cuts built for the feed — sound design, snappy VFX, and pacing tuned to hold attention in under a minute.</p>
       <div class="shorts-row">
@@ -461,8 +467,8 @@
 
     <section id="montages">
       <div class="marker">
-        <span class="tc mono">01:12</span>
-        <h2>Old Montages</h2>
+        <span class="tc mono" style="color:var(--teal);">01:12</span>
+        <h2 class="c-teal">Gaming Montages</h2>
       </div>
       <p class="lead">Longer-form edits from earlier in my career — full montages with more room for transitions, color work, and a slower build.</p>
       <div class="montage-grid">
@@ -477,10 +483,24 @@
       </div>
     </section>
 
+    <section id="finance">
+      <div class="marker">
+        <span class="tc mono" style="color:var(--violet);">01:40</span>
+        <h2 class="c-violet">Finance Videos</h2>
+      </div>
+      <p class="lead">A different pace — edits built for finance content, where clarity and trust matter more than fast cuts.</p>
+      <div class="montage-grid" style="grid-template-columns:1fr; max-width:340px; margin:0 auto;">
+        <div class="montage-card" style="max-width:340px;">
+          <div class="frame" style="aspect-ratio:9/16;"><iframe src="https://www.youtube.com/embed/CYm8X4B7Z6o" title="Finance edit" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="cap">finance_01</div>
+        </div>
+      </div>
+    </section>
+
     <section id="about">
       <div class="marker">
-        <span class="tc mono">01:48</span>
-        <h2>About</h2>
+        <span class="tc mono" style="color:var(--red);">02:00</span>
+        <h2 class="c-red">About</h2>
       </div>
       <p class="bio">I'm <strong>G1zmo</strong>, a video editor with <strong>6+ years</strong> of experience in After Effects. I edit gaming content, mostly built around Clash gameplay, and my edits have generated <strong>10M+ views</strong> combined. My work ranges from fast, sound-designed Shorts built for the feed to longer montages with room to breathe — pacing, motion graphics, color grading, and sound design, start to finish.</p>
 
@@ -496,8 +516,8 @@
 
     <section id="clients">
       <div class="marker">
-        <span class="tc mono">02:05</span>
-        <h2>Clients</h2>
+        <span class="tc mono" style="color:var(--amber);">02:15</span>
+        <h2 class="c-amber">Clients</h2>
       </div>
       <p class="lead">Channels I've edited for.</p>
       <div class="client-row">
@@ -526,8 +546,8 @@
 
     <section id="contact">
       <div class="marker">
-        <span class="tc mono">02:20</span>
-        <h2>Contact</h2>
+        <span class="tc mono" style="color:var(--teal);">02:30</span>
+        <h2 class="c-teal">Contact</h2>
       </div>
       <p class="lead">Have footage that needs cutting? Reach me here.</p>
       <div class="contact-rows">
