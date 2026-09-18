@@ -1,1 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G1zmo — Video Editor</title>
+<meta name="description" content="G1zmo — video editor with 6+ years in After Effects, 10M+ views generated across edited content.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230B0E11'/%3E%3Cpolygon points='35,25 75,50 35,75' fill='%23E7A93B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0B0E11;
+    --panel:#12161B;
+    --panel-2:#171C22;
+    --line:#242A31;
+    --ink:#EDEEE9;
+    --mute:#8B929A;
+    --teal:#2E8C82;
+    --amber:#E7A93B;
+    --red:#D9614F;
+    --rail-w: 210px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.012) 0px,
+      rgba(255,255,255,0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index:5;
+  }
+  a{color:inherit;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
 
+  /* ---------- Rail ---------- */
+  .rail{
+    position:fixed;
+    left:0; top:0;
+    width:var(--rail-w);
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:32px 0 28px 32px;
+    border-right:1px solid var(--line);
+    z-index:10;
+  }
+  .rail-top .wordmark{
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .rail-top .role{
+    display:block;
+    margin-top:4px;
+    font-size:12px;
+    color:var(--mute);
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .timeline{
+    position:relative;
+    margin-top:40px;
+    padding-left:18px;
+  }
+  .timeline .spine{
+    position:absolute;
+    left:0; top:4px; bottom:4px;
+    width:1px;
+    background:var(--line);
+  }
+  .timeline .playhead{
+    position:absolute;
+    left:-3px;
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 3px rgba(231,169,59,0.15);
+    transition:top .25s ease;
+    top:0;
+  }
+  .tick{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    padding:9px 0;
+    text-decoration:none;
+    color:var(--mute);
+    font-size:13px;
+    transition:color .2s ease;
+  }
+  .tick .tc{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--mute);
+    min-width:44px;
+  }
+  .tick.active, .tick:hover{ color:var(--ink); }
+  .tick.active .tc{ color:var(--amber); }
+
+  .rail-bottom a{
+    display:block;
+    font-size:12px;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--mute);
+    text-decoration:none;
+    margin-bottom:6px;
+  }
+  .rail-bottom a:hover{ color:var(--amber); }
+
+  /* mobile top bar */
+  .topbar{
+    display:none;
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:20;
+    background:rgba(11,14,17,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:14px 20px;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .topbar .wordmark{ font-weight:700; font-size:17px; }
+  .progress{
+    position:fixed;
+    top:0; left:0; right:0;
+    height:2px;
+    background:var(--amber);
+    width:0%;
+    z-index:21;
+    transition:width .1s linear;
+  }
+
+  /* ---------- Main ---------- */
+  main{
+    margin-left:var(--rail-w);
+    max-width:760px;
+    padding:0 48px;
+  }
+  section{
+    padding:110px 0 60px;
+    border-bottom:1px solid var(--line);
+  }
+  section:last-of-type{ border-bottom:none; }
+
+  .marker{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .marker .tc{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:var(--amber);
+  }
+  .marker h2{
+    margin:0;
+    font-size:22px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  /* Hero */
+  #intro{ padding-top:150px; }
+  .rec{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--mute);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:5px 12px 5px 10px;
+    margin-bottom:26px;
+  }
+  .rec .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--red);
+    animation:blink 1.8s ease-in-out infinite;
+  }
+  @keyframes blink{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.25; }
+  }
+  h1{
+    font-size:clamp(48px, 8vw, 78px);
+    line-height:0.98;
+    font-weight:700;
+    letter-spacing:-0.03em;
+    margin:0 0 22px;
+  }
+  .tagline{
+    font-size:18px;
+    color:var(--mute);
+    max-width:52ch;
+    margin:0 0 40px;
+  }
+  .stat-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:40px;
+    align-items:flex-end;
+    margin-bottom:44px;
+  }
+  .stat-number{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:40px;
+    font-weight:500;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  .stat-label{
+    display:block;
+    font-size:13px;
+    color:var(--mute);
+    margin-top:4px;
+  }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-block;
+    padding:13px 22px;
+    border-radius:2px;
+    font-size:14px;
+    text-decoration:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .btn:hover{ opacity:.85; }
+  .btn-solid{ background:var(--amber); color:var(--void); }
+  .btn-outline{ border:1px solid var(--line); color:var(--ink); }
+
+  p.lead{ color:var(--mute); margin-bottom:36px; max-width:60ch; }
+
+  /* Video grids */
+  .shorts-row{
+    display:flex;
+    gap:18px;
+    overflow-x:auto;
+    padding-bottom:6px;
+  }
+  .short-card{
+    flex:0 0 200px;
+    background:var(--panel);
+    border:1px solid var(--line);
+  }
+  .short-card .frame{
+    aspect-ratio:9/16;
+    width:100%;
+  }
+  .short-card iframe{ width:100%; height:100%; border:0; display:block; }
+  .short-card .cap{
+    padding:10px 12px;
+    font-size:12px;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--mute);
+  }
+
+  .montage-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .montage-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+  }
+  .montage-card .frame{ aspect-ratio:16/9; width:100%; }
+  .montage-card iframe{ width:100%; height:100%; border:0; display:block; }
+  .montage-card .cap{
+    padding:10px 14px;
+    font-size:12px;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--mute);
+  }
+
+  /* About / layer stack */
+  .bio{ color:var(--mute); max-width:62ch; margin-bottom:44px; }
+  .bio strong{ color:var(--ink); font-weight:600; }
+  .layers{
+    border-top:1px solid var(--line);
+  }
+  .layer-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .layer-row .lnum{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--mute);
+    width:26px;
+  }
+  .layer-row .swatch{
+    width:10px; height:10px;
+    flex:0 0 10px;
+  }
+  .layer-row .lname{ font-size:15px; }
+
+  /* Contact */
+  .contact-rows{ border-top:1px solid var(--line); margin-top:6px; }
+  .contact-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid var(--line);
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .contact-row .k{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--mute);
+  }
+  .contact-row .v{ font-size:16px; }
+  .contact-row:hover .v{ color:var(--amber); }
+
+  footer{
+    padding:40px 0 90px;
+    color:var(--mute);
+    font-size:13px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  @media (max-width:900px){
+    .rail{ display:none; }
+    .topbar{ display:flex; }
+    .progress{ display:block; }
+    main{ margin-left:0; padding:0 22px; max-width:100%; }
+    section{ padding:70px 0 40px; }
+    #intro{ padding-top:110px; }
+    .montage-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="progress" id="progress"></div>
+  <div class="topbar">
+    <span class="wordmark">G1zmo</span>
+    <a href="#contact" class="mono" style="font-size:12px; color:var(--mute); text-decoration:none;">Contact</a>
+  </div>
+
+  <aside class="rail">
+    <div>
+      <div class="rail-top">
+        <span class="wordmark">G1zmo</span>
+        <span class="role">Video Editor</span>
+      </div>
+      <nav class="timeline" id="timeline">
+        <div class="spine"></div>
+        <div class="playhead" id="playhead"></div>
+        <a href="#intro" class="tick" data-target="intro"><span class="tc">00:00</span>Intro</a>
+        <a href="#shorts" class="tick" data-target="shorts"><span class="tc">00:24</span>Popular Shorts</a>
+        <a href="#montages" class="tick" data-target="montages"><span class="tc">01:12</span>Old Montages</a>
+        <a href="#about" class="tick" data-target="about"><span class="tc">01:48</span>About</a>
+        <a href="#contact" class="tick" data-target="contact"><span class="tc">02:20</span>Contact</a>
+      </nav>
+    </div>
+    <div class="rail-bottom">
+      <a href="https://www.youtube.com/@G1zmo" target="_blank" rel="noopener">youtube.com/@G1zmo</a>
+      <a href="mailto:g1zmo.editing123@gmail.com">g1zmo.editing123@gmail.com</a>
+    </div>
+  </aside>
+
+  <main>
+
+    <section id="intro">
+      <span class="rec"><span class="dot"></span>Available for edits</span>
+      <h1>G1zmo</h1>
+      <p class="tagline">I edit gaming videos in After Effects — Shorts built for retention and longer montages built to hold attention, with pacing, VFX, and sound doing the work.</p>
+
+      <div class="stat-row">
+        <div>
+          <span class="stat-number mono">10M+</span>
+          <span class="stat-label">views generated across edited content</span>
+        </div>
+        <div>
+          <span class="stat-number mono">6+</span>
+          <span class="stat-label">years editing in After Effects</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-solid" href="https://www.youtube.com/@G1zmo" target="_blank" rel="noopener">Watch the channel</a>
+        <a class="btn btn-outline" href="#contact">Get in touch</a>
+      </div>
+    </section>
+
+    <section id="shorts">
+      <div class="marker">
+        <span class="tc mono">00:24</span>
+        <h2>Popular Shorts</h2>
+      </div>
+      <p class="lead">Fast cuts built for the feed — sound design, snappy VFX, and pacing tuned to hold attention in under a minute.</p>
+      <div class="shorts-row">
+        <div class="short-card">
+          <div class="frame"><iframe src="https://www.youtube.com/embed/sMDSE9TU1D0" title="Short 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="cap">short_01</div>
+        </div>
+        <div class="short-card">
+          <div class="frame"><iframe src="https://www.youtube.com/embed/rpAE34y5_IE" title="Short 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="cap">short_02</div>
+        </div>
+        <div class="short-card">
+          <div class="frame"><iframe src="https://www.youtube.com/embed/fs9VV0b83hU" title="Short 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="cap">short_03</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="montages">
+      <div class="marker">
+        <span class="tc mono">01:12</span>
+        <h2>Old Montages</h2>
+      </div>
+      <p class="lead">Longer-form edits from earlier in my career — full montages with more room for transitions, color work, and a slower build.</p>
+      <div class="montage-grid">
+        <div class="montage-card">
+          <div class="frame"><iframe src="https://www.youtube.com/embed/0Uhh0s8MjfA" title="Montage 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="cap">montage_01</div>
+        </div>
+        <div class="montage-card">
+          <div class="frame"><iframe src="https://www.youtube.com/embed/BQu2oKFddWA" title="Montage 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+          <div class="cap">montage_02</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="marker">
+        <span class="tc mono">01:48</span>
+        <h2>About</h2>
+      </div>
+      <p class="bio">I'm <strong>G1zmo</strong>, a video editor with <strong>6+ years</strong> of experience in After Effects. I edit gaming content, mostly built around Clash gameplay, and my edits have generated <strong>10M+ views</strong> combined. My work ranges from fast, sound-designed Shorts built for the feed to longer montages with room to breathe — pacing, motion graphics, color grading, and sound design, start to finish.</p>
+
+      <div class="layers">
+        <div class="layer-row"><span class="lnum mono">06</span><span class="swatch" style="background:var(--amber);"></span><span class="lname">Sound Design</span></div>
+        <div class="layer-row"><span class="lnum mono">05</span><span class="swatch" style="background:var(--teal);"></span><span class="lname">Motion Graphics &amp; VFX</span></div>
+        <div class="layer-row"><span class="lnum mono">04</span><span class="swatch" style="background:var(--red);"></span><span class="lname">Color Grading</span></div>
+        <div class="layer-row"><span class="lnum mono">03</span><span class="swatch" style="background:var(--amber);"></span><span class="lname">Pacing &amp; Story</span></div>
+        <div class="layer-row"><span class="lnum mono">02</span><span class="swatch" style="background:var(--teal);"></span><span class="lname">Transitions</span></div>
+        <div class="layer-row"><span class="lnum mono">01</span><span class="swatch" style="background:var(--red);"></span><span class="lname">Thumbnail Design</span></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="marker">
+        <span class="tc mono">02:20</span>
+        <h2>Contact</h2>
+      </div>
+      <p class="lead">Have footage that needs cutting? Reach me here.</p>
+      <div class="contact-rows">
+        <a class="contact-row" href="mailto:g1zmo.editing123@gmail.com">
+          <span class="k">EMAIL</span>
+          <span class="v">g1zmo.editing123@gmail.com</span>
+        </a>
+        <div class="contact-row" style="cursor:default;">
+          <span class="k">DISCORD</span>
+          <span class="v">g1zmovfx</span>
+        </div>
+        <a class="contact-row" href="https://www.youtube.com/@G1zmo" target="_blank" rel="noopener">
+          <span class="k">YOUTUBE</span>
+          <span class="v">@G1zmo</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <span>G1zmo — Video Editor</span>
+      <span class="mono" id="year"></span>
+    </footer>
+
+  </main>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Scroll-spy for rail ticks + playhead + mobile progress bar
+  const ticks = Array.from(document.querySelectorAll('.tick'));
+  const sections = ticks.map(t => document.getElementById(t.dataset.target));
+  const playhead = document.getElementById('playhead');
+  const timeline = document.getElementById('timeline');
+  const progressBar = document.getElementById('progress');
+
+  function updatePlayhead(activeIndex){
+    if(!playhead || !timeline) return;
+    const total = ticks.length;
+    const spineTop = 4, spineBottom = 4;
+    const timelineHeight = timeline.offsetHeight - spineTop - spineBottom;
+    const step = timelineHeight / (total - 1);
+    const y = spineTop + step * activeIndex;
+    playhead.style.top = y + 'px';
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const idx = sections.indexOf(entry.target);
+        ticks.forEach(t => t.classList.remove('active'));
+        if(idx > -1){
+          ticks[idx].classList.add('active');
+          updatePlayhead(idx);
+        }
+      }
+    });
+  }, { threshold: 0.45 });
+
+  sections.forEach(s => { if(s) observer.observe(s); });
+  updatePlayhead(0);
+
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+</script>
+
+</body>
+</html>
