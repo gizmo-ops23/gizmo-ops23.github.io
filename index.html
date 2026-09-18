@@ -317,10 +317,14 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:20px;
-    font-weight:500;
-    color:var(--void);
+    overflow:hidden;
+    background:var(--panel);
+    border:1px solid var(--line);
+  }
+  .client-card .avatar img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
   }
   .client-card .cname{
     font-size:13px;
@@ -492,24 +496,24 @@
       <p class="lead">Channels I've edited for.</p>
       <div class="client-row">
         <a class="client-card" href="https://www.youtube.com/@leprofrancais/videos" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--teal);">L</span>
+          <span class="avatar"><img src="assets/clients/leprofrancais.png" alt="Le Pro Francais"></span>
           <span class="cname">Le Pro Francais</span>
-          <span class="csubs">SUBS_LPF</span>
+          <span class="csubs">1.44M subs</span>
         </a>
         <a class="client-card" href="https://www.youtube.com/@notaleks" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--red);">N</span>
+          <span class="avatar"><img src="assets/clients/notaleks.png" alt="Not Aleks"></span>
           <span class="cname">Not Aleks</span>
-          <span class="csubs">SUBS_NA</span>
+          <span class="csubs">105K subs</span>
         </a>
         <a class="client-card" href="https://www.youtube.com/@zado9108" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--amber);">Z</span>
+          <span class="avatar"><img src="assets/clients/zado.png" alt="ZADO"></span>
           <span class="cname">ZADO</span>
-          <span class="csubs">SUBS_ZADO</span>
+          <span class="csubs">2K subs</span>
         </a>
         <a class="client-card" href="https://www.youtube.com/@zzenofnnr/videos" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--teal);">Z</span>
+          <span class="avatar"><img src="assets/clients/zenofn.png" alt="ZenoFN"></span>
           <span class="cname">ZenoFN</span>
-          <span class="csubs">SUBS_ZENO</span>
+          <span class="csubs">6K subs</span>
         </a>
       </div>
     </section>
