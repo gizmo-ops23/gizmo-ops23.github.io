@@ -327,6 +327,12 @@
     color:var(--mute);
     transition:color .2s ease;
   }
+  .client-card .csubs{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--mute);
+    opacity:.7;
+  }
   .client-card:hover .cname{ color:var(--amber); }
   .contact-rows{
     border-top:1px solid var(--line);
@@ -485,17 +491,25 @@
       </div>
       <p class="lead">Channels I've edited for.</p>
       <div class="client-row">
+        <a class="client-card" href="https://www.youtube.com/@leprofrancais/videos" target="_blank" rel="noopener">
+          <span class="avatar" style="background:var(--teal);">L</span>
+          <span class="cname">Le Pro Francais</span>
+          <span class="csubs">SUBS_LPF</span>
+        </a>
         <a class="client-card" href="https://www.youtube.com/@notaleks" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--teal);">N</span>
+          <span class="avatar" style="background:var(--red);">N</span>
           <span class="cname">Not Aleks</span>
+          <span class="csubs">SUBS_NA</span>
         </a>
         <a class="client-card" href="https://www.youtube.com/@zado9108" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--red);">Z</span>
+          <span class="avatar" style="background:var(--amber);">Z</span>
           <span class="cname">ZADO</span>
+          <span class="csubs">SUBS_ZADO</span>
         </a>
         <a class="client-card" href="https://www.youtube.com/@zzenofnnr/videos" target="_blank" rel="noopener">
-          <span class="avatar" style="background:var(--amber);">Z</span>
+          <span class="avatar" style="background:var(--teal);">Z</span>
           <span class="cname">ZenoFN</span>
+          <span class="csubs">SUBS_ZENO</span>
         </a>
       </div>
     </section>
