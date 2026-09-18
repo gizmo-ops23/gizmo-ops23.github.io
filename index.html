@@ -13,20 +13,23 @@
   :root{
     --void:#0B0E11;
     --panel:#12161B;
-    --panel-2:#171C22;
-    --line:#242A31;
+    --line:#262C33;
     --ink:#EDEEE9;
     --mute:#8B929A;
     --teal:#2E8C82;
     --amber:#E7A93B;
     --red:#D9614F;
-    --rail-w: 210px;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    background:var(--void);
+    background:
+      radial-gradient(900px 520px at 18% -8%, rgba(46,140,130,0.20), transparent 60%),
+      radial-gradient(800px 480px at 86% 8%, rgba(231,169,59,0.14), transparent 60%),
+      radial-gradient(700px 520px at 50% 105%, rgba(217,97,79,0.10), transparent 60%),
+      var(--void);
+    background-attachment:fixed;
     color:var(--ink);
     font-family:'Space Grotesk', sans-serif;
     font-size:16px;
@@ -40,8 +43,8 @@
     pointer-events:none;
     background:repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,0.012) 0px,
-      rgba(255,255,255,0.012) 1px,
+      rgba(255,255,255,0.014) 0px,
+      rgba(255,255,255,0.014) 1px,
       transparent 1px,
       transparent 3px
     );
@@ -50,121 +53,79 @@
   a{color:inherit;}
   .mono{font-family:'IBM Plex Mono', monospace;}
 
-  /* ---------- Rail ---------- */
-  .rail{
-    position:fixed;
-    left:0; top:0;
-    width:var(--rail-w);
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    padding:32px 0 28px 32px;
-    border-right:1px solid var(--line);
-    z-index:10;
-  }
-  .rail-top .wordmark{
-    font-size:20px;
-    font-weight:700;
-    letter-spacing:-0.02em;
-  }
-  .rail-top .role{
-    display:block;
-    margin-top:4px;
-    font-size:12px;
-    color:var(--mute);
-    font-family:'IBM Plex Mono', monospace;
-  }
-  .timeline{
-    position:relative;
-    margin-top:40px;
-    padding-left:18px;
-  }
-  .timeline .spine{
-    position:absolute;
-    left:0; top:4px; bottom:4px;
-    width:1px;
-    background:var(--line);
-  }
-  .timeline .playhead{
-    position:absolute;
-    left:-3px;
-    width:7px; height:7px;
-    border-radius:50%;
-    background:var(--amber);
-    box-shadow:0 0 0 3px rgba(231,169,59,0.15);
-    transition:top .25s ease;
-    top:0;
-  }
-  .tick{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-    padding:9px 0;
-    text-decoration:none;
-    color:var(--mute);
-    font-size:13px;
-    transition:color .2s ease;
-  }
-  .tick .tc{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--mute);
-    min-width:44px;
-  }
-  .tick.active, .tick:hover{ color:var(--ink); }
-  .tick.active .tc{ color:var(--amber); }
-
-  .rail-bottom a{
-    display:block;
-    font-size:12px;
-    font-family:'IBM Plex Mono', monospace;
-    color:var(--mute);
-    text-decoration:none;
-    margin-bottom:6px;
-  }
-  .rail-bottom a:hover{ color:var(--amber); }
-
-  /* mobile top bar */
+  /* ---------- Top nav / scrubber ---------- */
   .topbar{
-    display:none;
     position:fixed;
     top:0; left:0; right:0;
     z-index:20;
-    background:rgba(11,14,17,0.92);
-    backdrop-filter:blur(6px);
+    background:rgba(11,14,17,0.82);
+    backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line);
-    padding:14px 20px;
+  }
+  .topbar-inner{
+    max-width:820px;
+    margin:0 auto;
+    padding:16px 24px;
+    display:flex;
+    flex-direction:column;
     align-items:center;
-    justify-content:space-between;
+    gap:14px;
   }
   .topbar .wordmark{ font-weight:700; font-size:17px; }
-  .progress{
-    position:fixed;
-    top:0; left:0; right:0;
+  .nav-links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:22px;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--mute);
+    font-size:13px;
+    font-family:'IBM Plex Mono', monospace;
+    display:flex;
+    align-items:baseline;
+    gap:7px;
+    transition:color .2s ease;
+  }
+  .nav-links a .tc{ font-size:11px; color:var(--mute); }
+  .nav-links a.active{ color:var(--ink); }
+  .nav-links a.active .tc{ color:var(--amber); }
+
+  .scrub-track{
+    width:100%;
     height:2px;
-    background:var(--amber);
+    background:var(--line);
+    position:relative;
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .scrub-fill{
+    position:absolute;
+    left:0; top:0; bottom:0;
     width:0%;
-    z-index:21;
+    background:var(--amber);
     transition:width .1s linear;
   }
 
   /* ---------- Main ---------- */
   main{
-    margin-left:var(--rail-w);
-    max-width:760px;
-    padding:0 48px;
+    max-width:720px;
+    margin:0 auto;
+    padding:0 24px;
+    text-align:center;
   }
   section{
-    padding:110px 0 60px;
+    padding:100px 0 60px;
     border-bottom:1px solid var(--line);
   }
   section:last-of-type{ border-bottom:none; }
 
   .marker{
     display:flex;
-    align-items:baseline;
-    gap:14px;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
     margin-bottom:28px;
   }
   .marker .tc{
@@ -174,13 +135,13 @@
   }
   .marker h2{
     margin:0;
-    font-size:22px;
+    font-size:24px;
     font-weight:600;
     letter-spacing:-0.01em;
   }
 
   /* Hero */
-  #intro{ padding-top:150px; }
+  #intro{ padding-top:170px; }
   .rec{
     display:inline-flex;
     align-items:center;
@@ -203,7 +164,7 @@
     50%{ opacity:.25; }
   }
   h1{
-    font-size:clamp(48px, 8vw, 78px);
+    font-size:clamp(52px, 10vw, 88px);
     line-height:0.98;
     font-weight:700;
     letter-spacing:-0.03em;
@@ -212,14 +173,14 @@
   .tagline{
     font-size:18px;
     color:var(--mute);
-    max-width:52ch;
-    margin:0 0 40px;
+    max-width:48ch;
+    margin:0 auto 40px;
   }
   .stat-row{
     display:flex;
     flex-wrap:wrap;
-    gap:40px;
-    align-items:flex-end;
+    justify-content:center;
+    gap:52px;
     margin-bottom:44px;
   }
   .stat-number{
@@ -235,7 +196,7 @@
     color:var(--mute);
     margin-top:4px;
   }
-  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
   .btn{
     display:inline-block;
     padding:13px 22px;
@@ -244,30 +205,27 @@
     text-decoration:none;
     font-family:'Space Grotesk', sans-serif;
     font-weight:500;
-    transition:opacity .2s ease, transform .2s ease;
+    transition:opacity .2s ease;
   }
   .btn:hover{ opacity:.85; }
   .btn-solid{ background:var(--amber); color:var(--void); }
   .btn-outline{ border:1px solid var(--line); color:var(--ink); }
 
-  p.lead{ color:var(--mute); margin-bottom:36px; max-width:60ch; }
+  p.lead{ color:var(--mute); margin:0 auto 36px; max-width:56ch; }
 
   /* Video grids */
   .shorts-row{
     display:flex;
     gap:18px;
-    overflow-x:auto;
-    padding-bottom:6px;
+    justify-content:center;
+    flex-wrap:wrap;
   }
   .short-card{
-    flex:0 0 200px;
+    flex:0 0 190px;
     background:var(--panel);
     border:1px solid var(--line);
   }
-  .short-card .frame{
-    aspect-ratio:9/16;
-    width:100%;
-  }
+  .short-card .frame{ aspect-ratio:9/16; width:100%; }
   .short-card iframe{ width:100%; height:100%; border:0; display:block; }
   .short-card .cap{
     padding:10px 12px;
@@ -292,17 +250,21 @@
     font-size:12px;
     font-family:'IBM Plex Mono', monospace;
     color:var(--mute);
+    text-align:left;
   }
 
   /* About / layer stack */
-  .bio{ color:var(--mute); max-width:62ch; margin-bottom:44px; }
+  .bio{ color:var(--mute); max-width:60ch; margin:0 auto 44px; }
   .bio strong{ color:var(--ink); font-weight:600; }
   .layers{
     border-top:1px solid var(--line);
+    max-width:420px;
+    margin:0 auto;
   }
   .layer-row{
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:16px;
     padding:14px 0;
     border-bottom:1px solid var(--line);
@@ -311,16 +273,21 @@
     font-family:'IBM Plex Mono', monospace;
     font-size:12px;
     color:var(--mute);
-    width:26px;
+    width:22px;
+    text-align:right;
   }
   .layer-row .swatch{
     width:10px; height:10px;
     flex:0 0 10px;
   }
-  .layer-row .lname{ font-size:15px; }
+  .layer-row .lname{ font-size:15px; width:180px; text-align:left; }
 
   /* Contact */
-  .contact-rows{ border-top:1px solid var(--line); margin-top:6px; }
+  .contact-rows{
+    border-top:1px solid var(--line);
+    margin:6px auto 0;
+    max-width:420px;
+  }
   .contact-row{
     display:flex;
     justify-content:space-between;
@@ -343,51 +310,34 @@
     color:var(--mute);
     font-size:13px;
     display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:10px;
+    justify-content:center;
+    gap:16px;
   }
 
-  @media (max-width:900px){
-    .rail{ display:none; }
-    .topbar{ display:flex; }
-    .progress{ display:block; }
-    main{ margin-left:0; padding:0 22px; max-width:100%; }
+  @media (max-width:640px){
     section{ padding:70px 0 40px; }
-    #intro{ padding-top:110px; }
+    #intro{ padding-top:140px; }
     .montage-grid{ grid-template-columns:1fr; }
+    .nav-links{ gap:14px; }
+    .layer-row .lname{ width:auto; }
   }
 </style>
 </head>
 <body>
 
-  <div class="progress" id="progress"></div>
   <div class="topbar">
-    <span class="wordmark">G1zmo</span>
-    <a href="#contact" class="mono" style="font-size:12px; color:var(--mute); text-decoration:none;">Contact</a>
-  </div>
-
-  <aside class="rail">
-    <div>
-      <div class="rail-top">
-        <span class="wordmark">G1zmo</span>
-        <span class="role">Video Editor</span>
-      </div>
-      <nav class="timeline" id="timeline">
-        <div class="spine"></div>
-        <div class="playhead" id="playhead"></div>
-        <a href="#intro" class="tick" data-target="intro"><span class="tc">00:00</span>Intro</a>
-        <a href="#shorts" class="tick" data-target="shorts"><span class="tc">00:24</span>Popular Shorts</a>
-        <a href="#montages" class="tick" data-target="montages"><span class="tc">01:12</span>Old Montages</a>
-        <a href="#about" class="tick" data-target="about"><span class="tc">01:48</span>About</a>
-        <a href="#contact" class="tick" data-target="contact"><span class="tc">02:20</span>Contact</a>
+    <div class="topbar-inner">
+      <span class="wordmark">G1zmo</span>
+      <nav class="nav-links" id="navLinks">
+        <a href="#intro" data-target="intro"><span class="tc">00:00</span>Intro</a>
+        <a href="#shorts" data-target="shorts"><span class="tc">00:24</span>Shorts</a>
+        <a href="#montages" data-target="montages"><span class="tc">01:12</span>Montages</a>
+        <a href="#about" data-target="about"><span class="tc">01:48</span>About</a>
+        <a href="#contact" data-target="contact"><span class="tc">02:20</span>Contact</a>
       </nav>
+      <div class="scrub-track"><div class="scrub-fill" id="scrubFill"></div></div>
     </div>
-    <div class="rail-bottom">
-      <a href="https://www.youtube.com/@G1zmo" target="_blank" rel="noopener">youtube.com/@G1zmo</a>
-      <a href="mailto:g1zmo.editing123@gmail.com">g1zmo.editing123@gmail.com</a>
-    </div>
-  </aside>
+  </div>
 
   <main>
 
@@ -502,43 +452,26 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Scroll-spy for rail ticks + playhead + mobile progress bar
-  const ticks = Array.from(document.querySelectorAll('.tick'));
-  const sections = ticks.map(t => document.getElementById(t.dataset.target));
-  const playhead = document.getElementById('playhead');
-  const timeline = document.getElementById('timeline');
-  const progressBar = document.getElementById('progress');
-
-  function updatePlayhead(activeIndex){
-    if(!playhead || !timeline) return;
-    const total = ticks.length;
-    const spineTop = 4, spineBottom = 4;
-    const timelineHeight = timeline.offsetHeight - spineTop - spineBottom;
-    const step = timelineHeight / (total - 1);
-    const y = spineTop + step * activeIndex;
-    playhead.style.top = y + 'px';
-  }
+  const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
+  const sections = navLinks.map(a => document.getElementById(a.dataset.target));
+  const scrubFill = document.getElementById('scrubFill');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
         const idx = sections.indexOf(entry.target);
-        ticks.forEach(t => t.classList.remove('active'));
-        if(idx > -1){
-          ticks[idx].classList.add('active');
-          updatePlayhead(idx);
-        }
+        navLinks.forEach(a => a.classList.remove('active'));
+        if(idx > -1) navLinks[idx].classList.add('active');
       }
     });
   }, { threshold: 0.45 });
 
   sections.forEach(s => { if(s) observer.observe(s); });
-  updatePlayhead(0);
 
   window.addEventListener('scroll', () => {
     const h = document.documentElement;
     const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    progressBar.style.width = scrolled + '%';
+    scrubFill.style.width = scrolled + '%';
   });
 </script>
 
