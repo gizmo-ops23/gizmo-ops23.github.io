@@ -296,7 +296,38 @@
   }
   .layer-row .lname{ font-size:15px; width:180px; text-align:left; }
 
-  /* Contact */
+  .client-row{
+    display:flex;
+    justify-content:center;
+    gap:32px;
+    flex-wrap:wrap;
+  }
+  .client-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:var(--ink);
+    width:110px;
+  }
+  .client-card .avatar{
+    width:56px; height:56px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:20px;
+    font-weight:500;
+    color:var(--void);
+  }
+  .client-card .cname{
+    font-size:13px;
+    color:var(--mute);
+    transition:color .2s ease;
+  }
+  .client-card:hover .cname{ color:var(--amber); }
   .contact-rows{
     border-top:1px solid var(--line);
     margin:6px auto 0;
@@ -348,6 +379,7 @@
         <a href="#shorts" data-target="shorts"><span class="tc">00:24</span>Shorts</a>
         <a href="#montages" data-target="montages"><span class="tc">01:12</span>Montages</a>
         <a href="#about" data-target="about"><span class="tc">01:48</span>About</a>
+        <a href="#clients" data-target="clients"><span class="tc">02:05</span>Clients</a>
         <a href="#contact" data-target="contact"><span class="tc">02:20</span>Contact</a>
       </nav>
       <div class="scrub-track"><div class="scrub-fill" id="scrubFill"></div></div>
@@ -443,6 +475,28 @@
         <div class="layer-row"><span class="lnum mono">03</span><span class="swatch" style="background:var(--amber);"></span><span class="lname">Pacing &amp; Story</span></div>
         <div class="layer-row"><span class="lnum mono">02</span><span class="swatch" style="background:var(--teal);"></span><span class="lname">Transitions</span></div>
         <div class="layer-row"><span class="lnum mono">01</span><span class="swatch" style="background:var(--red);"></span><span class="lname">Thumbnail Design</span></div>
+      </div>
+    </section>
+
+    <section id="clients">
+      <div class="marker">
+        <span class="tc mono">02:05</span>
+        <h2>Clients</h2>
+      </div>
+      <p class="lead">Channels I've edited for.</p>
+      <div class="client-row">
+        <a class="client-card" href="https://www.youtube.com/@notaleks" target="_blank" rel="noopener">
+          <span class="avatar" style="background:var(--teal);">N</span>
+          <span class="cname">Not Aleks</span>
+        </a>
+        <a class="client-card" href="https://www.youtube.com/@zado9108" target="_blank" rel="noopener">
+          <span class="avatar" style="background:var(--red);">Z</span>
+          <span class="cname">ZADO</span>
+        </a>
+        <a class="client-card" href="https://www.youtube.com/@zzenofnnr/videos" target="_blank" rel="noopener">
+          <span class="avatar" style="background:var(--amber);">Z</span>
+          <span class="cname">ZenoFN</span>
+        </a>
       </div>
     </section>
 
